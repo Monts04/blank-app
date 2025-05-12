@@ -2,153 +2,208 @@ import streamlit as st
 import random
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 
 # 1. Introducción - Título
 def slide_intro():
-    st.title("📰 La Construcción de las Esferas Públicas y el Estado Moderno")
+    st.title("📰 ComuCode: La Comunicación en Acción - El Virreinato de la Nueva Granada")
     st.header("🗣️ Introducción")
     st.write("""
-    Bienvenidos a esta presentación sobre el impacto de la **comunicación** en la construcción de los **Estados modernos** y sus **esferas públicas**.
+    Bienvenidos a **ComuCode**, una experiencia interactiva que muestra cómo la **programación** puede ayudarnos a entender los **temas históricos** de la **comunicación** en el **Virreinato de la Nueva Granada** entre **1810 y 1816**.
     
-    Exploraremos cómo los **periódicos**, **discursos políticos** y otras formas de comunicación jugaron un papel crucial en la creación de la **identidad nacional** y la **participación pública** durante los siglos XVIII y XIX.
+    A través de este proyecto, exploraremos cómo los **periódicos monárquicos** y **realistas** influyeron en la **opinión pública** durante el conflicto independentista, ayudando a **defender el orden colonial** y contrarrestar las ideas **independentistas**.
     
-    Temas que cubriremos:
-    - La **comunicación en la construcción del Estado Nación**
-    - El **rol de los periódicos** en la esfera pública
-    - La **participación ciudadana** y los **discursos políticos**
+    ¡Prepárate para interactuar con la historia y entender cómo la **programación** puede ilustrar conceptos tan fundamentales como la construcción de la **esfera pública**!
     """)
 
-# 2. La Comunicación en la Construcción del Estado Nación
-def slide_comunicacion_estado():
-    st.header("📜 La Comunicación en la Construcción del Estado Nación")
+# 2. Interactividad: Opinión Pública en 1810
+def slide_slider_opinion():
+    st.header("📊 Simulación de la Opinión Pública en 1810")
     st.write("""
-    En el siglo XVIII, los **periódicos** y **discursos políticos** fueron esenciales para la construcción del **Estado Nación**.
+    Usaremos un **slider interactivo** para mostrar cómo la **opinión pública** cambiaba entre los defensores del **orden colonial** y los **independentistas** a lo largo de los años, según la influencia de los **periódicos monárquicos**.
     
-    Los periódicos ayudaron a difundir ideas de **unidad nacional** y **unificación**. Al leer los primeros **diarios**, la gente podía informarse sobre las decisiones políticas, el estado de la guerra, las políticas económicas y los discursos que construían una narrativa común.
-    
-    ¿Qué tema te gustaría explorar en el periódico de hoy?
+    **Desliza para ver cómo cambiaba la percepción pública de los diferentes temas en los periódicos**.
     """)
 
-    tema = st.selectbox(
-        "Selecciona un tema:",
-        ["Unidad Nacional", "Reformas Políticas", "Guerra y Conflicto", "Economía y Comercio"]
-    )
+    # Usamos el slider para manipular la "opinión pública" en base al año o la influencia
+    year = st.slider("Selecciona un año (1810 - 1816)", 1810, 1816, 1810)
+    
+    # Suponiendo que los periódicos monárquicos aumentaban su influencia a medida que la guerra avanzaba
+    opinion_colonial = np.clip(100 - (year - 1810) * 5, 0, 100)  # Entre 100 y 0
+    opinion_independentista = 100 - opinion_colonial
+    
+    # Visualizamos la opinión pública usando gráficos de barras
+    opinion_data = {
+        'Orden Colonial': opinion_colonial,
+        'Independencia': opinion_independentista
+    }
+    df = pd.DataFrame(list(opinion_data.items()), columns=["Opinión", "Porcentaje"])
 
-    if tema == "Unidad Nacional":
-        st.write("El periódico de hoy promueve la **unidad nacional**, destacando la importancia de formar una **nación unida** bajo un solo gobierno central.")
-    elif tema == "Reformas Políticas":
-        st.write("Hoy, el periódico discute las **reformas políticas** para modernizar el gobierno y dar a los ciudadanos un **rol más activo**.")
-    elif tema == "Guerra y Conflicto":
-        st.write("El periódico de hoy se enfoca en las **guerras** que consolidan la autoridad del Estado, mostrando cómo el conflicto ayuda a unir al pueblo bajo una causa común.")
+    # Mostrar la gráfica de barras
+    st.bar_chart(df.set_index("Opinión"))
+    
+    st.write(f"En el año {year}, la percepción pública era: ")
+    st.write(f"**{opinion_colonial}%** a favor del orden colonial y **{opinion_independentista}%** a favor de la independencia.")
+
+# 3. Gráfica Interactiva: Distribución de Temas en los Periódicos
+def slide_grafica_temporal():
+    st.header("📈 Evolución de los Temas en los Periódicos Monárquicos")
+    st.write("""
+    Ahora vamos a ver cómo la **distribución de los temas** en los **periódicos monárquicos** cambiaba a lo largo del tiempo, en relación con la **guerra**, **política** y **sociedad**.
+    
+    Desliza para ver cómo los temas ganaban o perdían relevancia durante los años de la **guerra** y el **conflicto**.
+    """)
+
+    # Slider para seleccionar el año
+    year = st.slider("Selecciona el año para ver la distribución de temas", 1810, 1816, 1810)
+    
+    # Crear una distribución de temas dependiendo del año
+    if year <= 1812:
+        guerra = 40 + random.randint(0, 20)  # Aumento gradual en guerra
+        politica = 30
+        sociedad = 20
+        economia = 10
+    elif year <= 1814:
+        guerra = 60
+        politica = 25
+        sociedad = 10
+        economia = 5
     else:
-        st.write("En este número del periódico, se habla de las **reformas económicas** necesarias para la **prosperidad** del Estado Nación.")
-
-# 3. La Prensa y los Primeros Periódicos
-def slide_prensa_periodicos():
-    st.header("📰 La Prensa y los Primeros Periódicos")
-    st.write("""
-    La prensa jugó un papel clave en la **construcción de la esfera pública**. Los periódicos permitieron a los ciudadanos acceder a información sobre el gobierno, las guerras y los debates políticos.
+        guerra = 80
+        politica = 15
+        sociedad = 3
+        economia = 2
     
-    Vamos a simular cómo el contenido de un periódico podría estar distribuido entre varias secciones que fomentan la **unidad nacional**.
-    """)
-
-    # Crear un gráfico de barras representando las secciones del periódico
-    secciones = ['Unidad Nacional', 'Reformas Políticas', 'Guerra y Conflicto', 'Economía']
-    cantidad = [30, 20, 25, 25]  # Representación del contenido de un periódico de la época
-
+    # Graficamos la distribución de los temas en los periódicos
+    temas = ['Guerra', 'Política', 'Sociedad', 'Economía']
+    distribucion = [guerra, politica, sociedad, economia]
+    
     plt.figure(figsize=(10, 6))
-    plt.bar(secciones, cantidad, color=['blue', 'green', 'red', 'orange'])
-    plt.title('Distribución del Contenido en el Periódico de la Época')
+    plt.bar(temas, distribucion, color=['red', 'green', 'blue', 'orange'])
+    plt.title(f'Distribución de Temas en los Periódicos en {year}')
     plt.xlabel('Secciones del Periódico')
-    plt.ylabel('Porcentaje de contenido')
+    plt.ylabel('Porcentaje de Contenido')
     st.pyplot(plt)
 
-# 4. El Rol de los Discursos Políticos
-def slide_discursos_politicos():
-    st.header("🎙️ Los Discursos Políticos en el Estado Nación")
-    st.write("""
-    Los **discursos políticos** eran una herramienta crucial para consolidar el poder del Estado. Los discursos pronunciados por líderes políticos ayudaban a **mover a las masas**, consolidar ideas nacionales y legitimar el poder.
-    
-    Ahora, vamos a simular un discurso donde elegirás los temas que un líder podría tratar para fortalecer el Estado Nación.
-    """)
-
-    tema_discurso = st.selectbox(
-        "¿Qué tema debería destacar el líder en su discurso?",
-        ["Unidad Nacional", "Desarrollo de la Educación", "Modernización del Gobierno", "Reformas Sociales"]
-    )
-
-    if tema_discurso == "Unidad Nacional":
-        st.write("El discurso enfatiza la **unidad nacional** y la necesidad de superar las divisiones internas para consolidar el poder del Estado.")
-    elif tema_discurso == "Desarrollo de la Educación":
-        st.write("Hoy, el líder enfatiza la importancia de una **educación centralizada** para formar ciudadanos leales y conscientes.")
-    elif tema_discurso == "Modernización del Gobierno":
-        st.write("El discurso promete **modernizar las instituciones** del gobierno para garantizar el progreso y la estabilidad.")
-    else:
-        st.write("El líder aborda las **reformas sociales** necesarias para mejorar las condiciones de vida de la población y fortalecer el Estado.")
-
-# 5. Participación Ciudadana y Esfera Pública
-def slide_participacion():
-    st.header("🗣️ Participación Ciudadana en la Esfera Pública")
-    st.write("""
-    La **prensa** permitió que la **opinión pública** fuera un factor crucial en la política, permitiendo a los ciudadanos influir en las decisiones gubernamentales.
-    
-    Vamos a simular cómo los ciudadanos pueden influir en la política a través de un **sondeo de opinión**.
-    """)
-
-    opinion = st.radio("¿Cuál es tu opinión sobre la centralización del poder?", ('A favor', 'En contra', 'Indiferente'))
-    
-    if opinion == 'A favor':
-        st.write("Tu opinión será reflejada en los periódicos que apoyan la **centralización del poder** y la consolidación del Estado.")
-    elif opinion == 'En contra':
-        st.write("Los periódicos opositores destacan tu preocupación por la **descentralización del poder** y los **derechos civiles**.")
-    else:
-        st.write("Los periódicos neutralizan tu opinión, presentando un enfoque **equilibrado** en la discusión política.")
-
-# 6. Relación con Big Data y PredPol
-def slide_big_data():
-    st.header("💻 Relación con Big Data y PredPol")
-    st.write("""
-    Si bien hemos hablado de cómo la **prensa** y los **discursos políticos** ayudaron a formar las esferas públicas en el pasado, hoy en día la **tecnología** y los **algoritmos de Big Data** siguen desempeñando un papel crucial.
-    
-    **PredPol**, un modelo predictivo de criminalidad, ha sido utilizado en la actualidad para predecir patrones de criminalidad, pero también ha generado preocupaciones sobre la **discriminación algorítmica** y cómo esta tecnología puede **afectar las percepciones públicas** de las comunidades.
-    
-    Vamos a explorar cómo esta herramienta **refuerza** las esferas públicas modernas, donde la percepción de **seguridad** y **justicia** sigue siendo influenciada por **datos** en lugar de la deliberación pública abierta.
-    """)
-
-    st.write("""
-    **PredPol** se basa en el análisis de datos históricos de crímenes para predecir dónde ocurrirán futuros delitos, pero también ha sido criticado por **perpetuar sesgos raciales** y **discriminación** en las comunidades marginadas. Esto es un ejemplo de cómo las **nuevas tecnologías** continúan modelando la **esfera pública**.
-    
-    Este fenómeno moderno de control social, basado en el **Big Data**, refleja cómo la **comunicación** actual se ha desplazado de los medios tradicionales a los algoritmos y modelos predictivos.
-    """)
-
-# 7. Conclusiones y Reflexión Final
+# 4. Conclusión Final y Reflexión
 def slide_conclusion():
     st.header("📝 Conclusión")
     st.write("""
-    A lo largo de esta presentación, hemos analizado cómo la **comunicación** fue fundamental en la construcción de los **estados modernos**. La **prensa**, los **discursos políticos** y la **participación ciudadana** ayudaron a dar forma a la **esfera pública** y consolidaron el poder estatal en el siglo XIX.
+    En esta presentación interactiva, hemos explorado cómo los **periódicos monárquicos** y **realistas** ayudaron a moldear la **opinión pública** en el **Virreinato de la Nueva Granada** durante los años críticos de la independencia (1810-1816).
     
-    ### Reflexión Final:
-    Hoy en día, la **comunicación** sigue siendo clave en la construcción del **Estado Nación**, pero ahora se enfrenta a los desafíos que traen las **nuevas tecnologías**. ¿Cómo podrían los algoritmos y la inteligencia artificial seguir influyendo en la esfera pública y el Estado en el futuro?
+    Al usar **herramientas de programación**, pudimos visualizar cómo la **comunicación masiva** influía en las decisiones políticas y sociales de la época. Además, al integrar **Big Data** y conceptos como **PredPol**, hemos hecho un paralelo entre el pasado y el impacto de los **algoritmos modernos** en la **esfera pública**.
+    
+    Reflexionamos sobre cómo los **medios conservadores** y **discursos contrarrevolucionarios** siguen teniendo una influencia notable en la **opinión pública** hoy en día, similar a los periódicos de la época.
+    """)
+
+# 2. Herramientas de Historia Social de la Comunicación: Fuentes y Metodologías
+def slide_hsc_metodologia():
+    st.header("📜 Herramientas Metodológicas en la Historia Social de la Comunicación")
+    st.write("""
+    La **Historia Social de la Comunicación** se enfoca en cómo los **intercambios simbólicos** (medios, discursos, prensa) **configuran** y **moldean la realidad social**. Usaremos este enfoque para analizar cómo los periódicos de la época ayudaban a **defender el orden colonial** y consolidar el poder realista en el **Virreinato de la Nueva Granada**.
+    
+    **Herramientas clave**:
+    - **Fuentes**: Periódicos, literatura, fuentes orales, objetos.
+    - **Criterios de Periodización**: Analizar cómo los **medios** influían en las **etapas críticas** del proceso de independencia.
+    - **Divulgación**: Cómo se comunicaban y se entendían las ideas entre los diferentes sectores sociales.
+    """)
+
+    # Agregar herramientas de visualización
+    st.write("Veamos cómo la **comunicación** de la época se basaba en **intercambios simbólicos** que reforzaban el poder realista.")
+
+    # Gráfico de distribución de fuentes y tipos de medios en la época
+    fuentes = ['Prensa Realista', 'Literatura', 'Fuentes Orales', 'Objetos Históricos']
+    cantidad = [70, 15, 10, 5]
+
+    plt.figure(figsize=(10, 6))
+    plt.pie(cantidad, labels=fuentes, autopct='%1.1f%%', startangle=140, colors=['blue', 'green', 'orange', 'red'])
+    plt.title('Distribución de Fuentes en la Historia Social de la Comunicación (Virreinato)')
+    st.pyplot(plt)
+
+# 3. Los Periódicos Monárquicos y la Defensa del Orden Colonial
+def slide_periodicos_monarquicos():
+    st.header("📜 Los Periódicos Monárquicos en la Contrarrevolución")
+    st.write("""
+    Los **periódicos monárquicos** fueron fundamentales en la **defensa del orden colonial**. A través de sus publicaciones, **moldeaban la opinión pública** para promover una narrativa que defendiera la **legitimidad del gobierno colonial** y presentara la **independencia** como una **amenaza** al orden social.
+    
+    Vamos a ver cómo los periódicos de la época distribuían el contenido relacionado con los **temores de la independencia**, **el miedo a la anarquía**, y la **justificación de la intervención de la corona**.
+    """)
+
+    # Crear una gráfica de barras con distribución de temas
+    secciones = ['Guerra', 'Política', 'Sociedad', 'Economía']
+    porcentaje = [35, 25, 20, 20]
+
+    plt.figure(figsize=(10, 6))
+    plt.bar(secciones, porcentaje, color=['red', 'green', 'blue', 'orange'])
+    plt.title('Distribución de Temas en Periódicos Monárquicos (1810-1816)')
+    plt.xlabel('Secciones del Periódico')
+    plt.ylabel('Porcentaje de Contenido')
+    st.pyplot(plt)
+
+# 2. Sección de Criminalización de la Pobreza con Simulación de PredPol
+def slide_criminalizacion():
+    st.header("🔴 Criminalización de la Pobreza y PredPol")
+    st.write("""
+    En esta sección, exploramos cómo los modelos predictivos, como **PredPol**, tienden a concentrarse en los **barrios pobres**, generando un **bucle de retroalimentación**.
+    
+    **Más vigilancia genera más arrestos**, justificando aún más vigilancia en el futuro. Este fenómeno puede perpetuar la **criminalización** de ciertas comunidades, especialmente las más vulnerables.
+    
+    Para entender mejor este fenómeno, vamos a ejecutar una simulación del modelo de **PredPol**: más vigilancia genera más arrestos, y esos arrestos justifican más vigilancia.
+    """)
+
+    # Simulación de PredPol: Bucle de retroalimentación
+    barrio_vigilado = st.radio("¿Quieres aumentar la vigilancia en un barrio pobre?", ('Sí', 'No'))
+    arrestos = 0
+
+    if barrio_vigilado == 'Sí':
+        arrestos = random.randint(5, 15)  # Número de arrestos iniciales
+        st.write(f"🔴 Se han realizado **{arrestos} arrestos** en el barrio vigilado.")
+        st.write("Esto justifica más presencia policial 🚔.")
+        
+        # Simulación de retroalimentación con un nuevo aumento de arrestos
+        decision = st.radio("¿Deseas aumentar la vigilancia de nuevo?", ('Sí', 'No'))
+        if decision == 'Sí':
+            arrestos += random.randint(5, 15)  # Aumento en los arrestos
+            st.write(f"🚔 Ahora se han realizado **{arrestos} arrestos**. El bucle de retroalimentación continúa...")
+        else:
+            st.write("🔵 Decidiste no aumentar la vigilancia, pero los arrestos iniciales ya generaron datos que refuerzan la percepción de criminalidad.")
+    else:
+        st.write("🟢 No aumentaste la vigilancia, el número de arrestos en la zona se mantiene bajo.")
+
+    # Visualización de cómo cambia la vigilancia
+    vigilancia_data = {'Vigilancia Baja': 100 - arrestos, 'Vigilancia Alta': arrestos}
+    df = pd.DataFrame(list(vigilancia_data.items()), columns=["Estado de Vigilancia", "Cantidad"])
+
+    st.bar_chart(df.set_index("Estado de Vigilancia"))
+
+    # Relación con el presente: Conexión con PredPol y tecnologías modernas
+    st.write("""
+    **Reflexión moderna:**  
+    Este fenómeno de **vigilancia predictiva** no es algo nuevo. Hoy en día, **algoritmos como PredPol** se utilizan en muchas ciudades del mundo para predecir patrones de criminalidad. Sin embargo, como en los ejemplos históricos, estas **tecnologías** **perpetúan sesgos**, especialmente en comunidades marginadas, lo que puede generar un círculo vicioso de **vigilancia y criminalización**.
+    
+    **PredPol** se basa en el análisis de datos históricos sobre crímenes para predecir dónde ocurrirán futuros delitos. Sin embargo, este modelo ha sido criticado por **reforzar estereotipos raciales** y **discriminar a ciertas comunidades**, especialmente aquellas que ya están sobrevigiladas.
+    
+    Así como los periódicos **realistas** de la época ayudaron a **moldear la percepción pública** a favor del orden colonial, hoy en día, **PredPol** y otros modelos similares **moldean la percepción de criminalidad** y perpetúan la **discriminación estructural**.
     """)
 
 # Función principal para ejecutar la aplicación de Streamlit
 def run():
     slide_intro()
     st.sidebar.title("Navegar entre Secciones")
-    option = st.sidebar.selectbox("Elige la sección que deseas ver:", ("Introducción", "Comunicación en el Estado Nación", "La Prensa y los Periódicos", "Los Discursos Políticos", "Participación Ciudadana", "Relación con Big Data y PredPol", "Conclusión"))
+    option = st.sidebar.selectbox("Elige la sección que deseas ver:", ("Introducción", "Herramientas Metodológicas", "Los Periódicos Monárquicos", "Simulación de Opinión Pública", "Evolución de los Temas en los Periódicos", "Conclusión"))
     
     if option == "Introducción":
         slide_intro()
-    elif option == "Comunicación en el Estado Nación":
-        slide_comunicacion_estado()
-    elif option == "La Prensa y los Periódicos":
-        slide_prensa_periodicos()
-    elif option == "Los Discursos Políticos":
-        slide_discursos_politicos()
-    elif option == "Participación Ciudadana":
-        slide_participacion()
-    elif option == "Relación con Big Data y PredPol":
-        slide_big_data()
+    elif option == "Herramientas Metodológicas":
+        slide_hsc_metodologia()
+    elif option == "Los Periódicos Monárquicos":
+        slide_periodicos_monarquicos()
+    elif option == "Simulación de Opinión Pública":
+        slide_slider_opinion()
+    elif option == "Evolución de los Temas en los Periódicos":
+        slide_grafica_temporal()
+    elif option == "¿Por qué es importante entenderlo hoy en día?":
+        slide_criminalizacion()
     else:
         slide_conclusion()
 
