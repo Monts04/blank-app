@@ -1,8 +1,9 @@
 import streamlit as st
-import matplotlib.pyplot as plt
 import random
+import matplotlib.pyplot as plt
+import pandas as pd
 
-# Título de la aplicación
+# 1. Introducción - Título
 def slide_intro():
     st.title("📰 La Construcción de las Esferas Públicas y el Estado Moderno")
     st.header("🗣️ Introducción")
@@ -17,13 +18,13 @@ def slide_intro():
     - La **participación ciudadana** y los **discursos políticos**
     """)
 
-# Diapositiva 2: La Comunicación en la Construcción del Estado Nación
+# 2. La Comunicación en la Construcción del Estado Nación
 def slide_comunicacion_estado():
     st.header("📜 La Comunicación en la Construcción del Estado Nación")
     st.write("""
     En el siglo XVIII, los **periódicos** y **discursos políticos** fueron esenciales para la construcción del **Estado Nación**.
     
-    Los periódicos ayudaron a difundir ideas de **identidad nacional** y **unificación**. Al leer los primeros **diarios**, la gente podía informarse sobre las decisiones políticas, el estado de la guerra, las políticas económicas y los discursos que construían una narrativa común.
+    Los periódicos ayudaron a difundir ideas de **unidad nacional** y **unificación**. Al leer los primeros **diarios**, la gente podía informarse sobre las decisiones políticas, el estado de la guerra, las políticas económicas y los discursos que construían una narrativa común.
     
     ¿Qué tema te gustaría explorar en el periódico de hoy?
     """)
@@ -42,7 +43,7 @@ def slide_comunicacion_estado():
     else:
         st.write("En este número del periódico, se habla de las **reformas económicas** necesarias para la **prosperidad** del Estado Nación.")
 
-# Diapositiva 3: La Prensa y los Primeros Periódicos
+# 3. La Prensa y los Primeros Periódicos
 def slide_prensa_periodicos():
     st.header("📰 La Prensa y los Primeros Periódicos")
     st.write("""
@@ -62,7 +63,7 @@ def slide_prensa_periodicos():
     plt.ylabel('Porcentaje de contenido')
     st.pyplot(plt)
 
-# Diapositiva 4: El Rol de los Discursos Políticos
+# 4. El Rol de los Discursos Políticos
 def slide_discursos_politicos():
     st.header("🎙️ Los Discursos Políticos en el Estado Nación")
     st.write("""
@@ -85,7 +86,7 @@ def slide_discursos_politicos():
     else:
         st.write("El líder aborda las **reformas sociales** necesarias para mejorar las condiciones de vida de la población y fortalecer el Estado.")
 
-# Diapositiva 5: Participación Ciudadana y Esfera Pública
+# 5. Participación Ciudadana y Esfera Pública
 def slide_participacion():
     st.header("🗣️ Participación Ciudadana en la Esfera Pública")
     st.write("""
@@ -103,7 +104,24 @@ def slide_participacion():
     else:
         st.write("Los periódicos neutralizan tu opinión, presentando un enfoque **equilibrado** en la discusión política.")
 
-# Diapositiva 6: Conclusión y Reflexión Final
+# 6. Relación con Big Data y PredPol
+def slide_big_data():
+    st.header("💻 Relación con Big Data y PredPol")
+    st.write("""
+    Si bien hemos hablado de cómo la **prensa** y los **discursos políticos** ayudaron a formar las esferas públicas en el pasado, hoy en día la **tecnología** y los **algoritmos de Big Data** siguen desempeñando un papel crucial.
+    
+    **PredPol**, un modelo predictivo de criminalidad, ha sido utilizado en la actualidad para predecir patrones de criminalidad, pero también ha generado preocupaciones sobre la **discriminación algorítmica** y cómo esta tecnología puede **afectar las percepciones públicas** de las comunidades.
+    
+    Vamos a explorar cómo esta herramienta **refuerza** las esferas públicas modernas, donde la percepción de **seguridad** y **justicia** sigue siendo influenciada por **datos** en lugar de la deliberación pública abierta.
+    """)
+
+    st.write("""
+    **PredPol** se basa en el análisis de datos históricos de crímenes para predecir dónde ocurrirán futuros delitos, pero también ha sido criticado por **perpetuar sesgos raciales** y **discriminación** en las comunidades marginadas. Esto es un ejemplo de cómo las **nuevas tecnologías** continúan modelando la **esfera pública**.
+    
+    Este fenómeno moderno de control social, basado en el **Big Data**, refleja cómo la **comunicación** actual se ha desplazado de los medios tradicionales a los algoritmos y modelos predictivos.
+    """)
+
+# 7. Conclusiones y Reflexión Final
 def slide_conclusion():
     st.header("📝 Conclusión")
     st.write("""
@@ -113,11 +131,11 @@ def slide_conclusion():
     Hoy en día, la **comunicación** sigue siendo clave en la construcción del **Estado Nación**, pero ahora se enfrenta a los desafíos que traen las **nuevas tecnologías**. ¿Cómo podrían los algoritmos y la inteligencia artificial seguir influyendo en la esfera pública y el Estado en el futuro?
     """)
 
-# Mostrar todo el contenido
+# Función principal para ejecutar la aplicación de Streamlit
 def run():
     slide_intro()
     st.sidebar.title("Navegar entre Secciones")
-    option = st.sidebar.selectbox("Elige la sección que deseas ver:", ("Introducción", "Comunicación en el Estado Nación", "La Prensa y los Periódicos", "Los Discursos Políticos", "Participación Ciudadana", "Conclusión"))
+    option = st.sidebar.selectbox("Elige la sección que deseas ver:", ("Introducción", "Comunicación en el Estado Nación", "La Prensa y los Periódicos", "Los Discursos Políticos", "Participación Ciudadana", "Relación con Big Data y PredPol", "Conclusión"))
     
     if option == "Introducción":
         slide_intro()
@@ -129,6 +147,8 @@ def run():
         slide_discursos_politicos()
     elif option == "Participación Ciudadana":
         slide_participacion()
+    elif option == "Relación con Big Data y PredPol":
+        slide_big_data()
     else:
         slide_conclusion()
 
