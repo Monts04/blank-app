@@ -190,7 +190,7 @@ def slide_criminalizacion():
 def run():
     slide_intro()
     st.sidebar.title("Navegar entre Secciones")
-    option = st.sidebar.selectbox("Elige la sección que deseas ver:", ("Introducción", "Herramientas Metodológicas", "Los Periódicos Monárquicos", "Simulación de Opinión Pública", "Evolución de los Temas en los Periódicos", "Conclusión"))
+    option = st.sidebar.selectbox("Elige la sección que deseas ver:", ("Introducción", "Herramientas Metodológicas", "Los Periódicos Monárquicos", "Simulación de Opinión Pública", "Evolución de los Temas en los Periódicos", "¿Por qué es importante entenderlo hoy en día?", "Conclusión"))
     
     if option == "Introducción":
         slide_intro()
