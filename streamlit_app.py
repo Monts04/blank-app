@@ -1,6 +1,6 @@
 import streamlit as st
-import random
 import matplotlib.pyplot as plt
+import random
 
 # Título de la aplicación
 def slide_intro():
